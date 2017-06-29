@@ -1,0 +1,12 @@
+image: Visual Studio 2015 
+before_build:
+ - nuget restore RefactoringForAbstraction\RefactoringForClarity\SingleResponsibilityPrinciple.sln
+ - nuget restore RefactoringForAbstraction\SingleResponsibilityPrinciple.sln
+ - nuget restore RefactoringForClarity\SingleResponsibilityPrinciple.sln
+ - nuget restore SingleResponsibilityPrinciple\SingleResponsibilityPrinciple.sln
+ 
+build_script:
+ - msbuild RefactoringForAbstraction\RefactoringForClarity\SingleResponsibilityPrinciple.sln
+ - msbuild RefactoringForAbstraction\SingleResponsibilityPrinciple.sln
+ - msbuild RefactoringForClarity\SingleResponsibilityPrinciple.sln
+ - msbuild SingleResponsibilityPrinciple\SingleResponsibilityPrinciple.sln
