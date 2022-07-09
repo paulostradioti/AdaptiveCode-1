@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SingleResponsibilityPrinciple.Abstractions;
+using System;
+using System.IO;
 
 namespace SingleResponsibilityPrinciple
 {
@@ -11,10 +8,19 @@ namespace SingleResponsibilityPrinciple
     {
         static void Main(string[] args)
         {
-            var tradeStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SingleResponsibilityPrinciple.trades.txt");
+            var stream = File.OpenRead("trades.txt");
 
-            var tradeProcessor = new TradeProcessor();
-            tradeProcessor.ProcessTrades(tradeStream);
+            ITradeDataReader tradeDataReader = new TextFileTradeDataReader();
+            ITradesLogger tradesLogger = new ConsoleITradesLogger();
+            ITradeValidator tradeValidator = new TradeValidator(tradesLogger);
+            ITradeMapper tradeMapper = new TradeMapper();
+            ITradeParser tradeParser = new TradeParser(tradeValidator, tradeMapper);
+
+
+            var tradeProcessor = new TradeProcessor(tradeDataReader, tradeParser);
+            tradeProcessor.ProcessTrades(stream);
+            
+            stream.Close();
 
             Console.ReadKey();
         }
